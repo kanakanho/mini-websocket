@@ -1,8 +1,8 @@
 import { serve } from "@hono/node-server";
 import { createNodeWebSocket } from "@hono/node-ws";
 import { Hono } from "hono";
-import type { WSContext } from "hono/ws";
 import { env } from "hono/adapter";
+import type { WSContext } from "hono/ws";
 
 const app = new Hono();
 
@@ -10,7 +10,7 @@ const { injectWebSocket, upgradeWebSocket } = createNodeWebSocket({ app });
 
 app.get("/", (c) => {
   const { URL } = env<{ URL: string }>(c);
-  return c.body(`<!DOCTYPE html>
+  return c.html(`<!DOCTYPE html>
 <html lang="ja">
   <head>
     <meta charset="UTF-8" />
@@ -54,7 +54,7 @@ app.get("/", (c) => {
     <div id="message"></div>
   </body>
   <script>
-    const socket = new WebSocket(${URL} + "/wss");
+    const socket = new WebSocket(URL + "/wss");
 
     socket.addEventListener("open", (event) => {
       // 受信開始を表示
@@ -118,7 +118,7 @@ app.get(
         console.error("WebSocket error");
       },
     };
-  })
+  }),
 );
 
 const port = Number(process.env.PORT) || 3000;
